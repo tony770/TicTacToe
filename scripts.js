@@ -1,18 +1,28 @@
-function GameBoard() {
-    const rows = 2;
-    const columns = 2;
-    const board = [];
+function createBoard() {
+    let board = Array(9).fill(null);
 
-    for(let i = 0; i < rows; i++) {
-        board[i] = [];
-        for(let j = 0; j < columns; j++) {
-            board[i].push(Cell());
+    const display = () => {
+        for(let i = 0; i < board.length; i += 3) {
+            console.log(board.slice(i, i + 3).map(cell => cell || '_').join(' '));
         }
     }
 
+    const update = (index, marker) => {
+        if (board[index] == null) {
+            board[index] = marker;
+            return true;
+        }
+        return false;
+    }
 
-}
+    const getBoard = () => board;
 
-function Cell() {
+    return { display, update, getBoard };
 
+};
+
+function createPlayer(marker) {
+    const getMarker = () => marker;
+
+    return { getMarker };
 }

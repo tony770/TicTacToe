@@ -1,11 +1,15 @@
 function createBoard() {
-    let board = Array(9).fill(null);
+    let board = [];
+    const rows = 3;
+    const columns = 3;
 
-    const display = () => {
-        for(let i = 0; i < board.length; i += 3) {
-            console.log(board.slice(i, i + 3).map(cell => cell || '_').join(' '));
+    for(let i = 0; i < rows; i++)
+        {
+            board[i] = [];
+            for(let j = 0; j < columns; j++){
+                board[i].push('');
+            }
         }
-    }
 
     const update = (index, marker) => {
         if (board[index] == null) {
@@ -17,7 +21,7 @@ function createBoard() {
 
     const getBoard = () => board;
 
-    return { display, update, getBoard };
+    return { update, getBoard };
 
 };
 

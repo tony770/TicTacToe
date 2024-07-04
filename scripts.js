@@ -61,43 +61,9 @@ const createGame = () => {
         return board.every(cell => cell !== null);
     }
 
-    const play = () => {
-        const readline = require('readline');
-        const rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout
-        })
-
-        const promptMove = () => {
-            board.display();
-            rl.question(`Player ${currentPlayer.getMarker()}, enter you move (0-8): `, (input) => {
-                const index = parseInt(input);
-                if(index >= 0 && index <= 8 && board.update(index, currentPlayer.getMarker())) {
-                    if(checkWin(board.getBoard())) {
-                        board.display();
-                        console.log(`Player ${currentPlayer.getMarker()} wins!`);
-                        rl.close();
-                    }
-                    else if(checkDraw(board.getBoard())) {
-                        board.display();
-                        console.log('Draw!');
-                        rl.close();
-                    }
-                    else {
-                        switchPlayer();
-                        promptMove();
-                    }
-                }
-                else {
-                    console.log('Invalid move. Try again.');
-                    promptMove();
-                }
-            })
-        }
-        promptMove();
-    }
-    return { play };
+    return { switchPlayer, checkDraw, checkWin };
 }
 
-const game = createGame();
-game.play();
+const display = () => {
+    
+}

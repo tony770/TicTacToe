@@ -11,9 +11,9 @@ function createBoard() {
             }
         }
 
-    const update = (index, marker) => {
-        if (board[index] == null) {
-            board[index] = marker;
+    const update = (row, col, marker) => {
+        if (board[row][col] === '') {
+            board[row][col] = marker;
             return true;
         }
         return false;
@@ -41,29 +41,77 @@ const createGame = () => {
         currentPlayer = (currentPlayer === player1) ? player2 : player1;
     }
 
-    const checkWin = (board) => {
+    const getCurrentPlayer = () => currentPlayer;
+
+    const checkWin = () => {
+        const gameBoard = board.getBoard();
         const winningCombo = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8], //rows
-            [0, 3, 6], [1, 4, 7], [2, 5, 8], //columns
-            [0, 4, 8], [2, 4, 6]             //diagonals
+            [[0, 0], [0, 1], [0, 2]],
+            [[1, 0], [1, 1], [1, 2]],
+            [[2, 0], [2, 1], [2, 2]],
+
+            [[0, 0], [1, 0], [2, 0]],
+            [[0, 1], [1, 1], [2, 1]],
+            [[0, 2], [1, 2], [2, 2]],
+
+            [[0, 0], [1, 1], [2, 2]],
+            [[0, 2], [1, 1], [2, 0]]
         ];
 
         for(const combo of winningCombo) {
             const [a, b, c] = combo;
-            if(board[a] && board[a] === board[b] && board[a] === board[c]) {
+            if(gameBoard[a[0]][a[1]] && gameBoard[a[0]][a[1]] === gameBoard[b[0]][b[1]] && gameBoard[a[0]][a[1]] === gameBoard[c[0]][c[1]]) {
                 return true;
             }
         }
         return false;
     }
 
-    const checkDraw = (board) => {
-        return board.every(cell => cell !== null);
+    const checkDraw = () => {
+        const gameBoard = board.getBoard();
+        return gameBoard.flat().every(cell => cell !== '');
     }
 
-    return { switchPlayer, checkDraw, checkWin };
+    return { switchPlayer, checkDraw, checkWin, getCurrentPlayer, board };
 }
 
 const display = () => {
-    
+    const gameState = document.querySelector('.gameState');
+    const boardContainer = document.querySelector('.board_container');
+    const game = createGame();
+
+    for(let i = 0; i < 3; i++)
+    {
+        for(let j = 0; j < 3; j++)
+        {
+            const cell = document.createElement('div');
+            cell.classList.add('cell');
+            cell.addEventListener('click', () => {
+                if(game.checkWin())
+                {
+                    return;
+                }
+                if(game.board.update(i, j, game.getCurrentPlayer().getMarker()))
+                {
+                    cell.textContent = game.getCurrentPlayer().getMarker();
+                    if(game.checkWin())
+                    {
+                        gameState.textContent = `Player ${game.getCurrentPlayer().getMarker()} Wins`;
+                    }
+                    else if(game.checkDraw())
+                    {
+                        gameState.textContent = "It's a Draw";
+                    }
+                    else
+                    {
+                        game.switchPlayer();
+                        gameState.textContent = `${game.getCurrentPlayer().getMarker()}'s turn`
+                    }
+                }
+            });
+            boardContainer.appendChild(cell);
+        }
+    }
 }
+
+display();

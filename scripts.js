@@ -96,7 +96,7 @@ const display = () => {
                     cell.textContent = game.getCurrentPlayer().getMarker();
                     if(game.checkWin())
                     {
-                        gameState.textContent = `Player ${game.getCurrentPlayer().getMarker()} Wins`;
+                        gameState.textContent = `Player ${game.getCurrentPlayer().getMarker()} wins`;
                     }
                     else if(game.checkDraw())
                     {
@@ -105,7 +105,7 @@ const display = () => {
                     else
                     {
                         game.switchPlayer();
-                        gameState.textContent = `${game.getCurrentPlayer().getMarker()}'s turn`
+                        gameState.textContent = `Player ${game.getCurrentPlayer().getMarker()}'s turn`
                     }
                 }
             });
